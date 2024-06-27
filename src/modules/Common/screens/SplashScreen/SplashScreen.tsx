@@ -9,11 +9,15 @@ import { LOGIN_SCREEN } from '../../../../utils/constants/RouteName'
 
 const SplashScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  useEffect(()=>{
-    setTimeout(()=>{
-      navigation.navigate(LOGIN_SCREEN)
-    },2000)
-  })
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: LOGIN_SCREEN }],
+      });
+    }, 2000); 
+    return () => clearTimeout(timer);
+  }, [navigation]);
   return (
     <View style={styles.container}>
       <Image source={logo_icon} style={styles.logo}/>
