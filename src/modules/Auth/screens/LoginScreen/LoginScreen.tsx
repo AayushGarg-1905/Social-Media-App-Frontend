@@ -14,14 +14,16 @@ import Toast from 'react-native-toast-message'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../../../navigation/RootNavigator'
-import { REGISTER_SCREEN } from '../../../../utils/constants/RouteName'
+import { HOME_SCREEN, REGISTER_SCREEN } from '../../../../utils/constants/RouteName'
+import { useAppDispatch } from '../../../../redux/hooks'
+import { setAuthData } from '../../../../redux/AuthSlice'
 
 const authService = new AuthService.default();
 const LoginScreen = () => {
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState({value:'',error:''});
   const [password, setPassword] = useState({value:'', error:''}); 
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +34,13 @@ const LoginScreen = () => {
     setIsLoading(true);
     const res = await authService.login(email.value, md5(password.value));
     // console.log(res);
+    if(res && res.status === 200 && res.data.data){
+      dispatch(setAuthData(res.data.data));
+      navigation.reset({
+        index: 0,
+        routes: [{ name: HOME_SCREEN }],
+      });
+    }
     setIsLoading(false);
   }
 

@@ -5,22 +5,27 @@ import { logo_icon } from '../../../../utils/images/GeneralImages'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../../../navigation/RootNavigator'
-import { LOGIN_SCREEN } from '../../../../utils/constants/RouteName'
+import { HOME_SCREEN, LOGIN_SCREEN } from '../../../../utils/constants/RouteName'
+import { useAppSelector } from '../../../../redux/hooks'
 
 const SplashScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const authData = useAppSelector((state) => state.auth);
+  
   useEffect(() => {
+    console.log('authData is ',authData);
     const timer = setTimeout(() => {
       navigation.reset({
         index: 0,
-        routes: [{ name: LOGIN_SCREEN }],
+        routes: [{ name: authData.data !== null ? HOME_SCREEN : LOGIN_SCREEN }],
       });
-    }, 2000); 
+    }, 2000);
     return () => clearTimeout(timer);
   }, [navigation]);
+
   return (
     <View style={styles.container}>
-      <Image source={logo_icon} style={styles.logo}/>
+      <Image source={logo_icon} style={styles.logo} />
     </View>
   )
 }
