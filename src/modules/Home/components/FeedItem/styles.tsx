@@ -47,6 +47,13 @@ export const styles = StyleSheet.create({
         width:'90%',
         marginTop:10,
         alignSelf:'center'
+    },
+    postImage:{
+        width:'90%',
+        height:200,
+        borderRadius:10,
+        alignSelf:'center',
+        marginVertical:10
     }
 
 })

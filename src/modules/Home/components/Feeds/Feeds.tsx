@@ -5,18 +5,23 @@ import { PostService } from '../../../../internal_exports'
 import { useAppSelector } from '../../../../redux/hooks';
 import { PostData } from '../../../../models/post.model';
 import FeedItem from '../FeedItem/FeedItem';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParams } from '../../../../navigation/RootNavigator';
+import { useIsFocused } from '@react-navigation/native';
 
 const postService = new PostService.default();
 const window = Dimensions.get('window')
 
 const Feeds = () => {
 
+  const isFocused = useIsFocused();  
   const authData = useAppSelector((state) => state.auth);
   const [feeds,setFeeds] = useState<PostData[]>([]);
   const [loading, setLoading] = useState(false);
   useEffect(()=>{
     fetchAllPosts();
-  },[])
+  },[isFocused])
 
   const fetchAllPosts = async()=>{
     setLoading(true);
@@ -37,13 +42,13 @@ const Feeds = () => {
     )
   }
   return (
-    <View>
+    <View style={{flex:1}}>
       <FlatList
         data={feeds}
         renderItem={({item,index})=>{
           return <FeedItem data={item}/>
         }}
-        style={{marginBottom:window.height/30}}
+        contentContainerStyle={{paddingBottom: window.height/10}}
       />
     </View>
   )

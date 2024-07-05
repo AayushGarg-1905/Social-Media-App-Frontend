@@ -3,7 +3,7 @@ import { BASE_URL } from "./common.model";
 
 export const ApiUrls = {
     getAllPosts: BASE_URL + '/posts/all',
-    // register: BASE_URL + '/auth/users/register'
+    createPost: BASE_URL + '/posts/create'
 }
 
 export interface GetAllPostsResponse {
@@ -11,6 +11,11 @@ export interface GetAllPostsResponse {
     data?:{
         postsData:PostData[]
     }
+}
+
+export interface CreatePostResponse {
+    msg:string,
+    data?: PostData
 }
 
 export interface PostData {

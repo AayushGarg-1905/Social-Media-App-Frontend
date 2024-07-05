@@ -9,12 +9,26 @@ import {
 import { ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { DISABLE_BTN_COLOR, GRADIENT_START } from '../../../../utils/Colors';
 import Toast from 'react-native-toast-message';
+import storage from '@react-native-firebase/storage';
+import { utils } from '@react-native-firebase/app';
+import { PostService } from '../../../../internal_exports';
+import { useAppSelector } from '../../../../redux/hooks';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParams } from '../../../../navigation/RootNavigator';
+import { HOME_SCREEN } from '../../../../utils/constants/RouteName';
+import Loader from '../../../Common/components/Loader/Loader';
 
+
+const postService = new PostService.default();
 const CreatePostScreen = () => {
+
+  const authData = useAppSelector((state) => state.auth);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const [imageData, setImageData] = useState<ImagePickerResponse | null>(null);
   const [caption, setCaption] = useState<string>('');
-  
+  const[isLoading, setIsLoading] = useState<boolean>(false);
   const openCamera = async () => {
     const res = await launchCamera({ mediaType: 'photo' });
     if (!res.didCancel) {
@@ -36,7 +50,7 @@ const CreatePostScreen = () => {
     return false;
   }
 
-  const handleCreatePost = ()=>{
+  const handleCreatePost = async()=>{
     if(handlePostButtonDisability()){
       Toast.show({
         type:'error',
@@ -45,6 +59,34 @@ const CreatePostScreen = () => {
       })
       return;
     }
+    setIsLoading(true);
+    let imageUrl = '';
+    if(imageData){
+      imageUrl = await uploadImageToFirebase();
+    }
+  
+    const res = await postService.createPost(authData.data?.accessToken,caption.length>0?caption:undefined, imageUrl.length>0 ? imageUrl:undefined);
+    setIsLoading(false);
+    if(res){
+      Toast.show({
+        type:'success',
+        text1:'Post Created Succesfully',
+        position:'top'
+      })
+      navigation.navigate(HOME_SCREEN);
+    }
+    
+  }
+
+  const uploadImageToFirebase = async()=>{
+    if(!imageData || !imageData.assets || !imageData.assets[0].fileName || !imageData.assets[0].uri){
+      return '';
+    }
+    const reference = storage().ref(imageData.assets[0].fileName);
+    const pathToFile = imageData.assets[0].uri;
+    await reference.putFile(pathToFile);
+    const firebaseUrl = await storage().ref(imageData.assets[0].fileName).getDownloadURL();
+    return firebaseUrl;
   }
 
   return (
@@ -83,6 +125,7 @@ const CreatePostScreen = () => {
       >
         <Text style={styles.btnText}>Post </Text>
       </TouchableOpacity>
+      <Loader isVisible={isLoading}/>
     </View>
   )
 }

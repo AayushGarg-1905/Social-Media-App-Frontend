@@ -9,7 +9,7 @@ type Props = {
 }
 
 const FeedItem = ({data}:Props) => {
-  console.log('data of post is ',data);
+  console.log('data is ',data);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,12 +17,15 @@ const FeedItem = ({data}:Props) => {
             <Image source={post_profile_icon} style={styles.profileImage}/>
             <View style={{marginLeft:8}}>
               <Text style={styles.userNameText}>{data.userName}</Text>
-              <Text style={styles.timestampText}>{data.createdAt}</Text>
+              <Text style={styles.timestampText}>{new Date(data.createdAt).toLocaleDateString()}</Text>
             </View>
         </View>
         <TouchableOpacity>
           <Image source={more_icon} style={styles.icon}/>
         </TouchableOpacity>
+      </View>
+      <View>
+        {data.imageUrl && <Image source={{uri:data.imageUrl}} style={styles.postImage}/>}
       </View>
       <Text style={styles.captionText}>{data.caption}</Text>
     </View>
