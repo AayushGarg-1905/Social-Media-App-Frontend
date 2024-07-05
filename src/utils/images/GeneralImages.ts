@@ -5,3 +5,5 @@ export const bottom_tab_plus_icon = require('../../assets/plus.png');
 export const camera_icon = require('../../assets/camera.png');
 export const gallery_icon = require('../../assets/gallery.png');
 export const close_icon = require('../../assets/close.png');
+export const post_profile_icon = require('../../assets/profile-user.png');
+export const more_icon = require('../../assets/more.png')

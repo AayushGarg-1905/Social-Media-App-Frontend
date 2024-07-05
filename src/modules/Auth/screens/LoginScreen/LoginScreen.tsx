@@ -35,7 +35,7 @@ const LoginScreen = () => {
     const res = await authService.login(email.value, md5(password.value));
     // console.log(res);
     if(res && res.status === 200 && res.data.data){
-      dispatch(setAuthData(res.data.data));
+      dispatch(setAuthData(res.data.data.userData));
       navigation.reset({
         index: 0,
         routes: [{ name: HOME_SCREEN }],

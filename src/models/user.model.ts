@@ -1,5 +1,6 @@
 export interface UserData {
     accessToken: string;
+    userId:string;
     userName: string;
     email: string;
     phoneNumber: number;
@@ -8,4 +9,6 @@ export interface UserData {
     address?: string;
     followers: string[];
     following: string[];
+    coverPicture:string;
+    profilePicture:string;
 }

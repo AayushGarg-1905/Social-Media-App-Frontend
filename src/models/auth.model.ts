@@ -8,7 +8,9 @@ export const ApiUrls = {
 
 export interface LoginResponse {
     msg:string,
-    data?: UserModel.UserData
+    data?:{
+        userData:UserModel.UserData
+    }
     
 }
 
