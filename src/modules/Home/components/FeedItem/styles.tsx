@@ -2,12 +2,14 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
     container: {
-        width: '90%',
+        width: '100%',
         alignSelf: 'center',
-        backgroundColor: '#f2f2f2',
+        // backgroundColor: '#f2f2f2',
         marginTop: 20,
         borderRadius:10,
-        paddingBottom:20
+        // paddingBottom:20,
+        // borderWidth:1,
+        // borderColor:'red'
     },
     header: {
         width:'100%',
@@ -46,14 +48,28 @@ export const styles = StyleSheet.create({
     captionText:{
         width:'90%',
         marginTop:10,
-        alignSelf:'center'
+        alignSelf:'center',
+        // color:'black'
     },
     postImage:{
-        width:'90%',
+        width:'100%',
         height:200,
-        borderRadius:10,
+        // borderRadius:10,
         alignSelf:'center',
-        marginVertical:10
+        marginVertical:10,
+        // resizeMode:'contain'
+    },
+    footer:{
+        width:'100%',
+        flexDirection:'row',
+        justifyContent:'space-evenly',
+        alignItems:'center',
+        // marginBottom:-10
+    },
+    statsValue:{
+        color:'black',
+        fontSize:15,
+        marginLeft:4
     }
 
 })

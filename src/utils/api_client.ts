@@ -11,6 +11,7 @@ export interface IApiClient {
     put<TRequest, TResponse>(path: string, object: TRequest, config?: RequestConfig): Promise<AxiosResponse<TResponse>>;
     get<TResponse>(path: string, config?: RequestConfig): Promise<AxiosResponse<TResponse>>;
     patch<TRequest, TResponse>(path: string, object: TRequest, config?: RequestConfig): Promise<AxiosResponse<TResponse>>;
+    delete<TResponse>(path: string, config?:RequestConfig):Promise<AxiosResponse<TResponse>>;
 }
 
 export default class ApiClient implements IApiClient {
@@ -38,6 +39,11 @@ export default class ApiClient implements IApiClient {
     
     async patch<TRequest, TResponse>(path: string, payload: TRequest, config?: RequestConfig): Promise<AxiosResponse<TResponse>> {
         const response = await this.client.patch<TResponse>(path, payload, config);
+        return response;
+    }
+
+    async delete<TResponse>(path: string, config?: RequestConfig): Promise<AxiosResponse<TResponse>> {
+        const response = await this.client.delete<TResponse>(path,config);
         return response;
     }
 

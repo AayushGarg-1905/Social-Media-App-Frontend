@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../../../../navigation/RootNavigator';
 import { useIsFocused } from '@react-navigation/native';
+import PostOptions from '../PostOptions/PostOptions';
 
 const postService = new PostService.default();
 const window = Dimensions.get('window')
@@ -19,9 +20,18 @@ const Feeds = () => {
   const authData = useAppSelector((state) => state.auth);
   const [feeds,setFeeds] = useState<PostData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isFeedUpdated, setIsFeedUpdated] = useState(false);
   useEffect(()=>{
-    fetchAllPosts();
+    console.log('useEffect of isFoccuse called');
+    fetchAllPosts()
   },[isFocused])
+
+  useEffect(()=>{
+    if(isFeedUpdated){
+      console.log('feed updated')
+      fetchAllPosts();
+    }
+  },[isFeedUpdated])
 
   const fetchAllPosts = async()=>{
     setLoading(true);
@@ -31,6 +41,7 @@ const Feeds = () => {
         setFeeds(res.data.data.postsData)
       }
       setLoading(false);
+      setIsFeedUpdated(false);
     }
   }
 
@@ -46,7 +57,7 @@ const Feeds = () => {
       <FlatList
         data={feeds}
         renderItem={({item,index})=>{
-          return <FeedItem data={item}/>
+          return <FeedItem data={item} isFeedUpdated={isFeedUpdated} setIsFeedUpdated={setIsFeedUpdated}/>
         }}
         contentContainerStyle={{paddingBottom: window.height/10}}
       />

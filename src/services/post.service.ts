@@ -25,7 +25,7 @@ export default class PostService {
         getAllPostsUrl,
         config
       );
-      console.log('res of getAllPosts is ', res.data);
+      // console.log('res of getAllPosts is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
@@ -66,6 +66,83 @@ export default class PostService {
         config
       );
       console.log('res of createPost is ', res.data);
+    } catch (err) {
+      // ErrorHandler(err);
+      if (axios.isAxiosError(err)) {
+        if (err.response) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error occured',
+            text2: err.response.data.msg
+          })
+        }
+      }
+    }
+    return res;
+  }
+
+  public async deletePost(
+    accessToken: string | null,
+    postId:string
+  ) {
+    const deletePostUrl = (PostModel.ApiUrls.deletePost).replace(':postId',postId);
+    console.log('deletePostUrl is ',deletePostUrl);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    
+    let res: AxiosResponse<PostModel.DeletePostResponse, any> | undefined;
+    try {
+      res = await this.apiClient.delete<PostModel.DeletePostResponse>(
+        deletePostUrl,
+        config
+      );
+      console.log('res of DeletePostResponse is ', res.data);
+    } catch (err) {
+      // ErrorHandler(err);
+      if (axios.isAxiosError(err)) {
+        if (err.response) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error occured',
+            text2: err.response.data.msg
+          })
+        }
+      }
+    }
+    return res;
+  }
+
+  public async editPost(
+    accessToken: string | null,
+    postId:string,
+    caption:string
+  ) {
+    const editPostUrl = (PostModel.ApiUrls.editPost).replace(':postId',postId);
+    console.log('deletePostUrl is ',editPostUrl);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const request = {
+      caption
+    }
+
+    type TRequest = typeof request;
+    
+    let res: AxiosResponse<PostModel.EditPostResponse, any> | undefined;
+    try {
+      res = await this.apiClient.put<TRequest,PostModel.EditPostResponse>(
+        editPostUrl,
+        request,
+        config
+      );
+      console.log('res of UpdatePostResponse is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
