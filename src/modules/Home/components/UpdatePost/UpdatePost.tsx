@@ -1,43 +1,32 @@
 import { Image, Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { SetStateAction, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styles } from './styles'
-import { close_icon, delete_icon, edit_icon } from '../../../../utils/images/GeneralImages';
-import { PostModel, PostService } from '../../../../internal_exports';
+import { close_icon } from '../../../../utils/images/GeneralImages';
+import { PostModel } from '../../../../internal_exports';
 import { DISABLE_BTN_COLOR, GRADIENT_START } from '../../../../utils/Colors';
-import { useAppSelector } from '../../../../redux/hooks';
-import Toast from 'react-native-toast-message';
+
 type Props = {
-    data: PostModel.PostData;
+    data: PostModel.PostData | null;
     visible: boolean;
-    setIsFeedUpdated: React.Dispatch<SetStateAction<boolean>>;
+    handleEditPost:(caption:string)=>void;
     onClose: () => void
 }
 
-const postService = new PostService.default();
+const UpdatePost = ({ data, visible, onClose, handleEditPost }: Props) => {
 
-const UpdatePost = ({ data, visible, setIsFeedUpdated, onClose }: Props) => {
+    const [caption, setCaption] = useState<string>('');
+    const [imageUrl, setImageUrl] = useState<string>('');
 
-    const [caption, setCaption] = useState<string>(data.caption ? data.caption : '');
-    const [imageUrl, setImageUrl] = useState<string>(data.imageUrl ? data.imageUrl : '');
-
-    const authData = useAppSelector((state)=>state.auth);
+    useEffect(()=>{
+        setCaption((data && data.caption) ? data.caption : '')
+        setImageUrl((data && data.imageUrl) ? data.imageUrl : '')
+    },[visible])
 
     const handleUpdatePostBtnDisability = ()=>{
         if(data && data.caption === caption){
             return true;
         }
         return false;
-    }
-
-    const handleEditPost = async()=>{
-        const res = await postService.editPost(authData.data ? authData.data.accessToken : null, data.postId, caption);
-        if(res){
-            setIsFeedUpdated(true);
-            Toast.show({
-                type:'success',
-                text1:res.data.msg
-            })
-        }
     }
 
     return (
@@ -64,7 +53,7 @@ const UpdatePost = ({ data, visible, setIsFeedUpdated, onClose }: Props) => {
                     }
 
                     <TouchableOpacity style={[styles.postBtn, { backgroundColor: handleUpdatePostBtnDisability() ? DISABLE_BTN_COLOR : GRADIENT_START }]}
-                        onPress={handleEditPost}
+                        onPress={()=>handleEditPost(caption)}
                     >
                         <Text style={styles.btnText}>Update Post</Text>
                     </TouchableOpacity>

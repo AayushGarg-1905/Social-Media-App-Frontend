@@ -10,7 +10,7 @@ type Props = {
     onClose:()=>void
 }
 
-const PostOptions = ({visible,onClickEditPost,onClickDeletePost, onClose}:Props) => {
+const PostOptions = ({visible,onClickEditPost, onClickDeletePost, onClose}:Props) => {
   return (
     <Modal onRequestClose={()=>onClose() } transparent visible={visible}>
         <View style={styles.container}>

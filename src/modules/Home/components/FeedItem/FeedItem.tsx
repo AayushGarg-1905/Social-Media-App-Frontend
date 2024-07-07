@@ -1,45 +1,15 @@
 import { Image, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { styles } from './styles'
-import { PostModel, PostService } from '../../../../internal_exports'
-import { bottom_tab_user_icon, comment_icon, like_icon, more_icon, post_profile_icon } from '../../../../utils/images/GeneralImages'
-import PostOptions from '../PostOptions/PostOptions'
-import { useAppSelector } from '../../../../redux/hooks'
-import Loader from '../../../Common/components/Loader/Loader'
-import Toast from 'react-native-toast-message'
-import UpdatePost from '../UpdatePost/UpdatePost'
+import { PostModel } from '../../../../internal_exports'
+import { comment_icon, like_icon, more_icon, post_profile_icon } from '../../../../utils/images/GeneralImages'
 
 type Props = {
   data: PostModel.PostData;
-  isFeedUpdated:boolean;
-  setIsFeedUpdated:React.Dispatch<React.SetStateAction<boolean>>;
+  onClickOptions:()=>void;
 }
 
-const postService = new PostService.default();
-
-const FeedItem = ({ data, isFeedUpdated, setIsFeedUpdated }: Props) => {
-
-  const authData = useAppSelector((state)=>state.auth);
-
-  const [openOptions, setOpenOptions] = useState<boolean>(false);
-  const [openEditPostModal, setOpenEditPostModal] = useState<boolean>(false);
-  
-  const handleEditPostModal = ()=>{
-    setOpenOptions(false);
-    setOpenEditPostModal(true);
-  }
-
-  const handleDeletePost = async()=>{
-    setOpenOptions(false);
-    const resp = await postService.deletePost(authData.data?authData.data.accessToken:null, data.postId);
-    if(resp){
-      Toast.show({
-        type:'success',
-        text1:resp.data.msg
-      })
-    }
-    setIsFeedUpdated(true);
-  }
+const FeedItem = ({ data, onClickOptions }: Props) => {
 
   return (
     <>
@@ -52,7 +22,7 @@ const FeedItem = ({ data, isFeedUpdated, setIsFeedUpdated }: Props) => {
               <Text style={styles.timestampText}>{new Date(data.createdAt).toLocaleDateString()}</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={() => setOpenOptions(true)}>
+          <TouchableOpacity onPress={() => onClickOptions()}>
             <Image source={more_icon} style={styles.icon} />
           </TouchableOpacity>
         </View>
@@ -75,24 +45,6 @@ const FeedItem = ({ data, isFeedUpdated, setIsFeedUpdated }: Props) => {
           </View>
         </View>
       </View>
-      
-      <PostOptions
-        visible={openOptions}
-        onClickEditPost={handleEditPostModal}
-        onClickDeletePost={handleDeletePost}
-        onClose={() => {
-          setOpenOptions(false)
-        }}
-      />
-
-      <UpdatePost
-        data={data}
-        visible={openEditPostModal}
-        setIsFeedUpdated={setIsFeedUpdated}
-        onClose={() => {
-          setOpenEditPostModal(false)
-        }}
-      />
     </>
   )
 }
