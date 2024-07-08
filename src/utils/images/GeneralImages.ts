@@ -11,3 +11,5 @@ export const like_icon = require('../../assets/like.png');
 export const comment_icon = require('../../assets/comment.png');
 export const edit_icon = require('../../assets/edit.png');
 export const delete_icon = require('../../assets/delete.png');
+export const liked_icon = require('../../assets/liked.png');
+export const heart_icon = require('../../assets/heart.png')

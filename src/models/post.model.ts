@@ -5,7 +5,9 @@ export const ApiUrls = {
     getAllPosts: BASE_URL + '/posts/all',
     createPost: BASE_URL + '/posts/create',
     deletePost: BASE_URL + '/posts/delete/:postId',
-    editPost: BASE_URL + '/posts/update/:postId'
+    editPost: BASE_URL + '/posts/update/:postId',
+    likePost: BASE_URL + '/posts/like/:postId',
+    unlikePost: BASE_URL + '/posts/unlike/:postId' 
 }
 
 export interface GetAllPostsResponse {
@@ -28,15 +30,28 @@ export interface EditPostResponse {
     msg:string
 }
 
+export interface LikePostResponse {
+    msg:string
+}
+
+export interface UnlikePostResponse {
+    msg:string
+}
+
 export interface PostData {
     postId:string;
     caption: string | null | undefined;
     userName: string;
     userId: string;
     likes: string[];
-    comments: string[];
+    comments: PostCommentMetaData[];
     imageUrl: string | null | undefined;
     createdAt:string
+}
+
+export interface PostCommentMetaData{
+    commentId:string;
+    userId:string
 }
 
 export interface RegisterResponse{

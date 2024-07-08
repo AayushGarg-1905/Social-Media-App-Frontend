@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { GRADIENT_START } from '../../../../utils/Colors'
 
 export const styles = StyleSheet.create({
     container: {
@@ -70,6 +71,20 @@ export const styles = StyleSheet.create({
         color:'black',
         fontSize:15,
         marginLeft:4
+    },
+    btn:{
+      height:35,
+      backgroundColor:GRADIENT_START,
+      paddingHorizontal:15,
+      marginTop:10,
+      borderRadius:10,
+      justifyContent:'center',
+      alignItems:'center'
+    },
+    btnText:{
+        color:'white',
+        fontSize:15
     }
+
 
 })

@@ -133,6 +133,7 @@ export default class PostService {
       caption
     }
 
+    console.log('editPost request is ',request)
     type TRequest = typeof request;
     
     let res: AxiosResponse<PostModel.EditPostResponse, any> | undefined;
@@ -143,6 +144,84 @@ export default class PostService {
         config
       );
       console.log('res of UpdatePostResponse is ', res.data);
+    } catch (err) {
+      // ErrorHandler(err);
+      if (axios.isAxiosError(err)) {
+        if (err.response) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error occured',
+            text2: err.response.data.msg
+          })
+        }
+      }
+    }
+    return res;
+  }
+
+  public async likePost(
+    accessToken: string | null,
+    postId:string,
+  ) {
+    const likePostUrl = (PostModel.ApiUrls.likePost).replace(':postId',postId);
+    console.log('likePostUrl is ',likePostUrl);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const request = {}
+
+    type TRequest = typeof request;
+    
+    let res: AxiosResponse<PostModel.LikePostResponse, any> | undefined;
+    try {
+      res = await this.apiClient.put<TRequest,PostModel.LikePostResponse>(
+        likePostUrl,
+        request,
+        config
+      );
+      console.log('res of LikePostResponse is ', res.data);
+    } catch (err) {
+      // ErrorHandler(err);
+      if (axios.isAxiosError(err)) {
+        if (err.response) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error occured',
+            text2: err.response.data.msg
+          })
+        }
+      }
+    }
+    return res;
+  }
+
+  public async unlikePost(
+    accessToken: string | null,
+    postId:string,
+  ) {
+    const unlikePostUrl = (PostModel.ApiUrls.unlikePost).replace(':postId',postId);
+    console.log('unlikePostUrl is ',unlikePostUrl);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const request = {}
+
+    type TRequest = typeof request;
+    
+    let res: AxiosResponse<PostModel.UnlikePostResponse, any> | undefined;
+    try {
+      res = await this.apiClient.put<TRequest,PostModel.UnlikePostResponse>(
+        unlikePostUrl,
+        request,
+        config
+      );
+      console.log('res of UnlikePostResponse is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
