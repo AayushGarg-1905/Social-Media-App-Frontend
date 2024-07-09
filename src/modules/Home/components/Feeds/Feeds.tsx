@@ -16,7 +16,11 @@ const postService = new PostService.default();
 const userService = new UserService.default();
 const window = Dimensions.get('window')
 
-const Feeds = () => {
+type Props = {
+  fetchPosts:()=>Promise<PostModel.PostData[] | undefined>;
+}
+
+const Feeds = ({fetchPosts}:Props) => {
 
   const isFocused = useIsFocused();
   const authData = useAppSelector((state) => state.auth);
@@ -35,12 +39,21 @@ const Feeds = () => {
     }
   }, [isFocused])
 
-  const fetchAllPosts = async () => {
-    if (authData.data && authData.data.accessToken) {
-      const res = await postService.getAllPosts(authData.data.accessToken);
-      if (res && res.data.data) {
-        setFeeds(res.data.data.postsData)
-      }
+  // const fetchAllPosts = async () => {
+  //   if (authData.data && authData.data.accessToken) {
+  //     const res = await postService.getAllPosts(authData.data.accessToken);
+  //     if (res && res.data.data) {
+  //       setFeeds(res.data.data.postsData)
+  //       return res.data.data.postsData
+  //     }
+      
+  //   }
+  // }
+
+  const fetchAllPosts = async()=>{
+    const res = await fetchPosts();
+    if(res){
+      setFeeds(res);
     }
   }
 

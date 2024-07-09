@@ -3,6 +3,7 @@ import { BASE_URL } from "./common.model";
 
 export const ApiUrls = {
     getAllPosts: BASE_URL + '/posts/all',
+    getAllUserPosts: BASE_URL + '/posts/all/:userId',
     createPost: BASE_URL + '/posts/create',
     deletePost: BASE_URL + '/posts/delete/:postId',
     editPost: BASE_URL + '/posts/update/:postId',
@@ -36,6 +37,13 @@ export interface LikePostResponse {
 
 export interface UnlikePostResponse {
     msg:string
+}
+
+export interface GetAllUserPostsResponse {
+    msg:string,
+    data?:{
+        postsData:PostData[]
+    }
 }
 
 export interface PostData {

@@ -114,4 +114,51 @@ export default class UserService {
         }
         return res;
     }
+
+    public async updateUser(
+        accessToken: string | null,
+        email?: string,
+        userName?:string,
+        phoneNumber?:number,
+        profilePicture?:string,
+        coverPicture?:string
+    ) {
+        const updateUserUrl = UserModel.ApiUrls.updateUser;
+        console.log('updateUserUrl is ',updateUserUrl);
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        };
+        const request={
+            email,
+            userName,
+            phoneNumber,
+            profilePicture,
+            coverPicture
+        };
+
+        type TRequest = typeof request;
+        let res: AxiosResponse<UserModel.UpdateUserResponse, any> | undefined;
+        try {
+            res = await this.apiClient.put<TRequest, UserModel.UpdateUserResponse>(
+                updateUserUrl,
+                request,
+                config
+            );
+            console.log('res of UpdateUserResponse is ', res.data);
+        } catch (err) {
+            // ErrorHandler(err);
+            if (axios.isAxiosError(err)) {
+                if (err.response) {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error occured',
+                        text2: err.response.data.msg
+                    })
+                }
+            }
+        }
+        return res;
+    }
 }

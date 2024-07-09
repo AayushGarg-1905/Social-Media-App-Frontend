@@ -8,7 +8,7 @@ import { GRADIENT_START } from '../../../../utils/Colors'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../../../navigation/RootNavigator'
-import { COMMENT_SCREEN } from '../../../../utils/constants/RouteName'
+import { COMMENT_SCREEN, OTHER_USER_PROFILE_SCREEN } from '../../../../utils/constants/RouteName'
 
 type Props = {
   data: PostModel.PostData;
@@ -53,7 +53,12 @@ const FeedItem = ({ data,userData, onClickOptions, handleLikePost, handleUnlikeP
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Image source={post_profile_icon} style={styles.profileImage} />
+            <TouchableOpacity onPress={()=>{
+              navigation.navigate(OTHER_USER_PROFILE_SCREEN,{userId:data.userId})
+            }}>
+              <Image source={post_profile_icon} style={styles.profileImage} />
+            </TouchableOpacity>
+            
             <View style={{ marginLeft: 8 }}>
               <Text style={styles.userNameText}>{data.userName}</Text>
               <Text style={styles.timestampText}>{new Date(data.createdAt).toLocaleDateString()}</Text>

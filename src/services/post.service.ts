@@ -237,4 +237,36 @@ export default class PostService {
     return res;
   }
 
+  public async getAllUserPosts(
+    accessToken: string | null,
+    userId:string
+  ) {
+    const getAllUserPostsUrl = PostModel.ApiUrls.getAllUserPosts.replace(':userId',userId);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    console.log('accessToken in service is ', accessToken);
+    let res: AxiosResponse<PostModel.GetAllUserPostsResponse, any> | undefined;
+    try {
+      res = await this.apiClient.get<PostModel.GetAllUserPostsResponse>(
+        getAllUserPostsUrl,
+        config
+      );
+    } catch (err) {
+      // ErrorHandler(err);
+      if (axios.isAxiosError(err)) {
+        if (err.response) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error occured',
+            text2: err.response.data.msg
+          })
+        }
+      }
+    }
+    return res;
+  }
+
 }

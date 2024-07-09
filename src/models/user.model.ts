@@ -4,7 +4,8 @@ import { BASE_URL } from "./common.model";
 export const ApiUrls = {
     getUser: BASE_URL + '/users/:id',
     followUser: BASE_URL + '/users/follow/:followerId',
-    unfollowUser: BASE_URL + '/users/unfollow/:followerId'
+    unfollowUser: BASE_URL + '/users/unfollow/:followerId',
+    updateUser: BASE_URL + '/users/update'
 }
 
 export interface FollowUserResponse{
@@ -20,6 +21,10 @@ export interface GetUserResponse{
     data:UserData;
 }
 
+export interface UpdateUserResponse{
+    msg:string
+}
+
 export interface UserData {
     accessToken: string;
     userId:string;
@@ -31,6 +36,7 @@ export interface UserData {
     address?: string;
     followers: string[];
     following: string[];
+    totalPosts?:number;
     coverPicture:string;
     profilePicture:string;
 }

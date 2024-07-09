@@ -9,15 +9,29 @@ import { useNavigation } from '@react-navigation/native'
 import { CREATE_POST_SCREEN } from '../../../../utils/constants/RouteName'
 import Feeds from '../../components/Feeds/Feeds'
 import Profile from '../../components/Profile/Profile'
+import { useAppSelector } from '../../../../redux/hooks'
+import { PostService } from '../../../../internal_exports'
 
+const postService = new PostService.default();
 const HomeScreen = () => {
   
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [selectedTab, setSelectedTab] = useState<number>(0);
+  const authData = useAppSelector((state) => state.auth);
+
+  const fetchAllPosts = async () => {
+    if (authData.data && authData.data.accessToken) {
+      const res = await postService.getAllPosts(authData.data.accessToken);
+      if (res && res.data.data) {
+        return res.data.data.postsData
+      }
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Instagram</Text>
-      {selectedTab===0 ? <Feeds/> : <Profile/>}
+      {selectedTab===0 ? <Feeds fetchPosts={fetchAllPosts}/> : <Profile userId={authData.data?.userId || ''}/>}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.bottomTab} onPress={()=>{setSelectedTab(0)}}>
           <Image
