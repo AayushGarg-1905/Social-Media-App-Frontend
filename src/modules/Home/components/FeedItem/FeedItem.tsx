@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../../../navigation/RootNavigator'
 import { COMMENT_SCREEN, OTHER_USER_PROFILE_SCREEN } from '../../../../utils/constants/RouteName'
+import { formattedDate } from '../../../../utils/utils'
 
 type Props = {
   data: PostModel.PostData;
@@ -66,7 +67,7 @@ const FeedItem = ({ data,userData, onClickOptions, handleLikePost, handleUnlikeP
             
             <View style={{ marginLeft: 8 }}>
               <Text style={styles.userNameText}>{data.userName}</Text>
-              <Text style={styles.timestampText}>{new Date(data.createdAt).toLocaleDateString()}</Text>
+              <Text style={styles.timestampText}>{formattedDate(data.createdAt)}</Text>
             </View>
           </View>
           {authData && authData.data && authData.data.userId === data.userId ?

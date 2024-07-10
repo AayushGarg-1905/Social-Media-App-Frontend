@@ -3,7 +3,9 @@ import { BASE_URL } from "./common.model";
 
 export const ApiUrls = {
     login: BASE_URL + '/auth/users/login',
-    register: BASE_URL + '/auth/users/register'
+    register: BASE_URL + '/auth/users/register',
+    checkLogin: BASE_URL + '/auth/users/check-login',
+    logout: BASE_URL + '/auth/users/logout'
 }
 
 export interface LoginResponse {
@@ -11,9 +13,19 @@ export interface LoginResponse {
     data?:{
         userData:UserModel.UserData
     }
-    
+}
+
+export interface CheckLoginResponse {
+    msg:string,
+    data?:{
+        userData:UserModel.UserData
+    }
 }
 
 export interface RegisterResponse{
+    msg:string
+}
+
+export interface LogoutResponse{
     msg:string
 }

@@ -80,7 +80,71 @@ export default class AuthService {
     return res;
   }
 
-  public async checkLogin() {
+  public async checkLogin(
+    accessToken:string
+  ) {
+    const checkLoginUrl = AuthModel.ApiUrls.checkLogin;
+    const config = {
+      headers: {
+          Authorization: `Bearer ${accessToken}`,
+      },
+  };
 
+    let res: AxiosResponse<AuthModel.CheckLoginResponse, any> | undefined;
+
+    try {
+      res = await this.apiClient.get<AuthModel.CheckLoginResponse>(
+        checkLoginUrl,
+        config,
+      );
+      console.log('res of checkLogin is ', res.data);
+    } catch (err) {
+      // ErrorHandler(err);
+      if(axios.isAxiosError(err)){
+        if(err.response){
+          Toast.show({
+            type:'error',
+            text1:'Error occured',
+            text2: err.response.data.msg
+          })
+        }
+      }
+    }
+    return res;
+  }
+
+  public async logout(
+    accessToken:string
+  ) {
+    const logoutUrl = AuthModel.ApiUrls.logout;
+    const request = {};
+    const config = {
+      headers: {
+          Authorization: `Bearer ${accessToken}`,
+      },
+  };
+    type TRequest = typeof request;
+    let res: AxiosResponse<AuthModel.LogoutResponse, any> | undefined;
+
+    try {
+      res = await this.apiClient.post<TRequest, AuthModel.LogoutResponse>(
+        logoutUrl,
+        request,
+        config
+      );
+      console.log('res of logout is ', res.data);
+    } catch (err) {
+      // ErrorHandler(err);
+      if(axios.isAxiosError(err)){
+        if(err.response){
+          Toast.show({
+            type:'error',
+            text1:'Error occured',
+            text2: err.response.data.msg
+          })
+        }
+      }
+    }
+    return res;
   }
 }

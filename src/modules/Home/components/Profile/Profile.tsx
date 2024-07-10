@@ -1,17 +1,21 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { styles } from './styles'
-import { useAppSelector } from '../../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { bottom_tab_user_icon, mail_icon, phone_icon } from '../../../../utils/images/GeneralImages';
-import { PostService, UserModel, UserService } from '../../../../internal_exports';
+import { AuthService, PostService, UserModel, UserService } from '../../../../internal_exports';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Feeds from '../Feeds/Feeds';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../../../../navigation/RootNavigator';
-import { EDIT_PROFILE_SCREEN } from '../../../../utils/constants/RouteName';
+import { EDIT_PROFILE_SCREEN, LOGIN_SCREEN } from '../../../../utils/constants/RouteName';
+import Toast from 'react-native-toast-message';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import { setAuthData } from '../../../../redux/AuthSlice';
 
 const userService = new UserService.default();
 const postService = new PostService.default();
+const authService = new AuthService.default();
 
 type ProfileProps = {
   userId:string
@@ -22,6 +26,7 @@ const Profile = ({userId}:ProfileProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
+  const dispatch = useAppDispatch();
   const [userData,setUserData] = useState<UserModel.UserData | null>(null);
 
   const isFocused = useIsFocused();
@@ -49,13 +54,38 @@ const Profile = ({userId}:ProfileProps) => {
     }
   }
 
+  const handleLogout = async()=>{
+    const res = await authService.logout(authData.data?.accessToken || '');
+    if(res && res.data){
+      Toast.show({
+        type:'success',
+        text1:res.data.msg
+      })
+      navigation.reset({
+        index: 0,
+        routes: [{ name: LOGIN_SCREEN }],
+      });
+      await EncryptedStorage.removeItem('accessToken');
+      dispatch(setAuthData(null));
+      
+    }
+  }
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.coverImageView}>
         {userData && userData.coverPicture ?
         <Image source={{uri:userData.coverPicture}} style={{height:'100%', width:'100%',resizeMode:'cover'}}/>
         : 
-        null}       
+        null}
+        {authData && authData.data && authData.data.userId === userId && 
+          <TouchableOpacity style={styles.logoutBtn} onPress={()=>{
+            handleLogout();
+          }}>
+          <Text style={styles.logoutBtnText}>Logout</Text>
+        </TouchableOpacity>
+        }
+               
       </View>
       <View style={styles.profilePictureContainer}>
         {userData && userData.profilePicture ?
@@ -63,7 +93,9 @@ const Profile = ({userId}:ProfileProps) => {
         : 
         <Image source={bottom_tab_user_icon} style={styles.profilePicture}/>
         }
+        
       </View>
+      
       <Text style={styles.userName}>{userData?.userName || ''}</Text>
       <View style={styles.contactDetailsContainer}>
         <View style={{flexDirection:'row',alignItems:'center'}}>
@@ -98,7 +130,7 @@ const Profile = ({userId}:ProfileProps) => {
     </TouchableOpacity>
       : 
       null}
-      <Feeds fetchPosts={fetchAllUserPosts}/>
+      <Feeds fetchPosts={fetchAllUserPosts} scrollEnabled={false}/>
     </ScrollView>
   )
 }

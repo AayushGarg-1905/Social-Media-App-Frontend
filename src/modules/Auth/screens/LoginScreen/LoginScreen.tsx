@@ -17,6 +17,7 @@ import { RootStackParams } from '../../../../navigation/RootNavigator'
 import { HOME_SCREEN, REGISTER_SCREEN } from '../../../../utils/constants/RouteName'
 import { useAppDispatch } from '../../../../redux/hooks'
 import { setAuthData } from '../../../../redux/AuthSlice'
+import EncryptedStorage from 'react-native-encrypted-storage'
 
 const authService = new AuthService.default();
 const LoginScreen = () => {
@@ -33,9 +34,9 @@ const LoginScreen = () => {
     console.log('login clicked')
     setIsLoading(true);
     const res = await authService.login(email.value, md5(password.value));
-    // console.log(res);
     if(res && res.status === 200 && res.data.data){
       dispatch(setAuthData(res.data.data.userData));
+      await EncryptedStorage.setItem('accessToken',res.data.data.userData.accessToken);
       navigation.reset({
         index: 0,
         routes: [{ name: HOME_SCREEN }],

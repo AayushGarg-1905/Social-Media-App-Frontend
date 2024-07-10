@@ -77,5 +77,18 @@ export const styles = StyleSheet.create({
     contactDetailsContainer:{
         flexDirection:'row',
         marginLeft:20
+    },
+    logoutBtn:{
+        height:25,
+        width:70,
+        borderRadius:7,
+        backgroundColor:'red',
+        justifyContent:'center',
+        alignItems:'center',
+        marginTop:10,
+        marginLeft:window.width/1.3
+    },
+    logoutBtnText:{
+        color:'white'
     }
 })

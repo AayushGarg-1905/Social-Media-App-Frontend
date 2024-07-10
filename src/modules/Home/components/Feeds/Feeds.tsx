@@ -18,9 +18,10 @@ const window = Dimensions.get('window')
 
 type Props = {
   fetchPosts:()=>Promise<PostModel.PostData[] | undefined>;
+  scrollEnabled?:boolean
 }
 
-const Feeds = ({fetchPosts}:Props) => {
+const Feeds = ({fetchPosts,scrollEnabled}:Props) => {
 
   const isFocused = useIsFocused();
   const authData = useAppSelector((state) => state.auth);
@@ -141,9 +142,11 @@ const Feeds = ({fetchPosts}:Props) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
+        scrollEnabled={scrollEnabled!=undefined && scrollEnabled===false ? false: true}
         data={feeds}
         renderItem={({ item, index }) => {
           return <FeedItem data={item}
+            
             userData = {userData}
             onClickOptions={() => {
               setSelectedPost(item);
