@@ -30,5 +30,7 @@ export interface CommentData{
     text:string,
     userId:string,
     userName:string,
-    createdAt:string
+    userProfilePicture:string,
+    createdAt:string,
+    
 }

@@ -50,6 +50,7 @@ export interface PostData {
     postId:string;
     caption: string | null | undefined;
     userName: string;
+    userProfilePicture:string;
     userId: string;
     likes: string[];
     comments: PostCommentMetaData[];

@@ -21,7 +21,8 @@ type Props = {
 }
 
 const FeedItem = ({ data,userData, onClickOptions, handleLikePost, handleUnlikePost, handleFollowUser, handleUnfollowUser }: Props) => {
-
+  
+  
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const authData = useAppSelector((state) => state.auth);
 
@@ -56,7 +57,11 @@ const FeedItem = ({ data,userData, onClickOptions, handleLikePost, handleUnlikeP
             <TouchableOpacity onPress={()=>{
               navigation.navigate(OTHER_USER_PROFILE_SCREEN,{userId:data.userId})
             }}>
+              {data.userProfilePicture ?
+              <Image source={{uri:data.userProfilePicture}} style={[styles.profileImage, {tintColor:'',resizeMode:'cover'}]} />
+              : 
               <Image source={post_profile_icon} style={styles.profileImage} />
+              }
             </TouchableOpacity>
             
             <View style={{ marginLeft: 8 }}>

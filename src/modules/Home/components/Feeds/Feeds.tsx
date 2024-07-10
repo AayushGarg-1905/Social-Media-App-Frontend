@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, View } from 'react-native'
+import { ActivityIndicator, Dimensions, FlatList, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { styles } from './styles'
 import { PostModel, PostService, UserModel, UserService } from '../../../../internal_exports'
@@ -138,14 +138,6 @@ const Feeds = ({fetchPosts}:Props) => {
     }
   }
 
-
-  // if(loading){
-  //   return (
-  //     <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-  //       <ActivityIndicator size='large'/>
-  //     </View>
-  //   )
-  // }
   return (
     <View style={{ flex: 1 }}>
       <FlatList

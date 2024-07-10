@@ -25,7 +25,7 @@ export default class PostService {
         getAllPostsUrl,
         config
       );
-      // console.log('res of getAllPosts is ', res.data);
+      console.log('res of getAllPosts is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {

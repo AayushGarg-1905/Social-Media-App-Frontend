@@ -2,7 +2,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { styles } from './styles'
 import { useAppSelector } from '../../../../redux/hooks';
-import { bottom_tab_user_icon } from '../../../../utils/images/GeneralImages';
+import { bottom_tab_user_icon, mail_icon, phone_icon } from '../../../../utils/images/GeneralImages';
 import { PostService, UserModel, UserService } from '../../../../internal_exports';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Feeds from '../Feeds/Feeds';
@@ -66,9 +66,15 @@ const Profile = ({userId}:ProfileProps) => {
       </View>
       <Text style={styles.userName}>{userData?.userName || ''}</Text>
       <View style={styles.contactDetailsContainer}>
-        {/* add icon for email and password */}
-        <Text style={styles.email}>{userData?.email || ''}</Text>
-        <Text style={styles.email}> | {userData?.phoneNumber || ''}</Text>
+        <View style={{flexDirection:'row',alignItems:'center'}}>
+          <Image source={mail_icon} style={{height:16,width:16,marginRight:4}}/>
+          <Text style={styles.email}>{userData?.email || ''}</Text>
+        </View>
+        <View style={{flexDirection:'row',alignItems:'center'}}>
+          <Text style={styles.email}> | </Text>
+          <Image source={phone_icon} style={{height:16,width:16,marginRight:4}}/>
+          <Text style={styles.email}>{userData?.phoneNumber || ''}</Text>
+        </View>
       </View>
       
       <View style={styles.statsContainer}>

@@ -18,8 +18,8 @@ import Loader from '../../../Common/components/Loader/Loader'
 type EditProfileProps = NativeStackScreenProps<RootStackParams, 'EditProfileScreen'>
 
 enum ImageUploadEnum {
-  coverPicture='coverPicture',
-  profilePicture='profilePicture'
+  coverPicture = 'coverPicture',
+  profilePicture = 'profilePicture'
 }
 
 const userService = new UserService.default();
@@ -27,12 +27,12 @@ const userService = new UserService.default();
 const EditProfileScreen = ({ route }: EditProfileProps) => {
 
   const { userData } = route.params;
-  const authData = useAppSelector((state)=>state.auth)
+  const authData = useAppSelector((state) => state.auth)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const [userName, setUserName] = useState({value: userData?.userName || '', error:''});
-  const [email, setEmail] = useState({value:userData?.email || '',error:''});
-  const [phoneNumber, setPhoneNumber] = useState({value:JSON.stringify(userData?.phoneNumber) || '', error:''});
+  const [userName, setUserName] = useState({ value: userData?.userName || '', error: '' });
+  const [email, setEmail] = useState({ value: userData?.email || '', error: '' });
+  const [phoneNumber, setPhoneNumber] = useState({ value: JSON.stringify(userData?.phoneNumber) || '', error: '' });
   const [profilePictureUrl, setProfilePictureUrl] = useState<string>(userData?.profilePicture || '');
   const [coverPictureUrl, setCoverPictureUrl] = useState<string>(userData?.coverPicture || '');
 
@@ -41,46 +41,61 @@ const EditProfileScreen = ({ route }: EditProfileProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const openGallery = async (type:ImageUploadEnum) => {
+  const openGallery = async (type: ImageUploadEnum) => {
     const res = await launchImageLibrary({ mediaType: 'photo' });
     if (!res.didCancel) {
-      if(type===ImageUploadEnum.coverPicture){
+      if (type === ImageUploadEnum.coverPicture) {
         setCoverImageData(res);
       }
-      else{
+      else {
         setProfileImageData(res);
       }
     }
   }
 
-  const handleUpdateProfileBtnDisability = ()=>{
-    if(!email.value || !userName.value || !phoneNumber.value){
+  const handleUpdateProfileBtnDisability = () => {
+    if (!email.value || !userName.value || !phoneNumber.value) {
       return true;
     }
-    if(email.error || userName.error || phoneNumber.error){
+    if (email.error || userName.error || phoneNumber.error) {
       return true;
     }
     return false;
   }
 
-  const handleEditProfile = async()=>{
+  const handleEditProfile = async () => {
     setIsLoading(true);
 
-    let profilePicture:string | undefined = undefined;
-    if(profileImageData){
-      profilePicture = await uploadImageToFirebase(profileImageData);
+    let profilePicture: string | undefined = undefined;
+    let coverPicture: string | undefined = undefined;
+    try {
+      if (profileImageData) {
+        console.log('profileImageData is ', profileImageData);
+        profilePicture = await uploadImageToFirebase(profileImageData);
+      }
+      console.log('after Profile picture');
+      if (coverImageData) {
+        console.log('coverImageData is ', coverImageData);
+        coverPicture = await uploadImageToFirebase(coverImageData);
+      }
+      console.log('after coverPicture');
     }
-    let coverPicture:string | undefined = undefined;
-    if(coverImageData){
-      coverPicture = await uploadImageToFirebase(coverImageData);
+    catch (error) {
+      Toast.show({
+        type: 'error',
+        text2: 'Some Error occured while updating the image'
+      })
+      setIsLoading(false);
+      return;
     }
 
     const res = await userService.updateUser(authData.data?.accessToken || null, email.value || undefined, userName.value || undefined, parseInt(phoneNumber.value) || undefined, profilePicture, coverPicture);
     setIsLoading(false);
-    if(res && res.status===200){
+
+    if (res && res.status === 200) {
       Toast.show({
-        type:'success',
-        text2:res.data.msg
+        type: 'success',
+        text2: res.data.msg
       })
       navigation.goBack();
       return;
@@ -89,46 +104,46 @@ const EditProfileScreen = ({ route }: EditProfileProps) => {
 
   return (
     <ScrollView style={styles.container}>
-    
-      <View style={{marginTop:10}}>
-        <TextInput label='User Name' placeholder='John Doe' errorText={userName.error} value={userName.value} onChangeText={(value)=>{
-          if(value.length === 0){
-            setUserName({value:value, error:"User name can't be empty"})
+
+      <View style={{ marginTop: 10 }}>
+        <TextInput label='User Name' placeholder='John Doe' errorText={userName.error} value={userName.value} onChangeText={(value) => {
+          if (value.length === 0) {
+            setUserName({ value: value, error: "User name can't be empty" })
           }
-          else{
-            setUserName({value:value,error:''} )
+          else {
+            setUserName({ value: value, error: '' })
           }
         }}
         />
-        <TextInput label='Email' placeholder='example@example.com' errorText={email.error} value={email.value} onChangeText={(value)=>{
-          if(value.length === 0){
-            setEmail({value:value, error:"Email can't be empty"})
+        <TextInput label='Email' placeholder='example@example.com' errorText={email.error} value={email.value} onChangeText={(value) => {
+          if (value.length === 0) {
+            setEmail({ value: value, error: "Email can't be empty" })
           }
-          else if(!isValidEmail(email.value)){
-            setEmail({value:value, error:"Invalid email format"})
+          else if (!isValidEmail(email.value)) {
+            setEmail({ value: value, error: "Invalid email format" })
           }
-          else{
-            setEmail({value:value,error:''} )
+          else {
+            setEmail({ value: value, error: '' })
           }
         }}
         />
         <TextInput label='Phone Number'
-         placeholder='9999999999'
+          placeholder='9999999999'
           errorText={phoneNumber.error}
-          value={phoneNumber.value} 
+          value={phoneNumber.value}
           keyboardType='number-pad'
           maxLength={10}
-          onChangeText={(value)=>{
-            if(value.length === 0){
-              setPhoneNumber({value:value, error:"Phone number can't be empty"})
+          onChangeText={(value) => {
+            if (value.length === 0) {
+              setPhoneNumber({ value: value, error: "Phone number can't be empty" })
             }
-            else if(value.length >10){
-              setPhoneNumber({value:value, error:"Phone number can't be more than 10 digits"})
+            else if (value.length > 10) {
+              setPhoneNumber({ value: value, error: "Phone number can't be more than 10 digits" })
             }
-            else{
-              setPhoneNumber({value:value,error:''} )
+            else {
+              setPhoneNumber({ value: value, error: '' })
             }
-        }}
+          }}
         />
       </View>
 
@@ -139,33 +154,38 @@ const EditProfileScreen = ({ route }: EditProfileProps) => {
             <Image source={{ uri: coverImageData.assets[0].uri }} style={styles.selectedCoverImage} />
             :
             coverPictureUrl ?
-            <Image source={{ uri: coverPictureUrl }} style={styles.selectedCoverImage} />
-             : 
-             <Image source={gallery_icon} style={styles.coverImage} />
+              <Image source={{ uri: coverPictureUrl }} style={styles.selectedCoverImage} />
+              :
+              <Image source={gallery_icon} style={styles.coverImage} />
           }
           <Image source={edit_icon} style={styles.editIcon} />
         </TouchableOpacity>
       </View>
 
-      <View style={{marginTop:10}}>
+      <View style={{ marginTop: 10 }}>
         <Text style={styles.heading}>Change Profile Picture</Text>
         <TouchableOpacity style={styles.profileImageView} onPress={() => openGallery(ImageUploadEnum.profilePicture)}>
           {profileImageData !== null && profileImageData.assets ?
             <Image source={{ uri: profileImageData.assets[0].uri }} style={styles.selectedProfileImage} />
-            : 
+            :
             profilePictureUrl ?
-            <Image source={{ uri: profilePictureUrl }} style={styles.selectedProfileImage} />
-            : 
-            <Image source={post_profile_icon} style={styles.selectedProfileImage} />
+              <Image source={{ uri: profilePictureUrl }} style={styles.selectedProfileImage} />
+              :
+              <Image source={post_profile_icon} style={styles.selectedProfileImage} />
           }
-          <Image source={edit_icon} style={[styles.editIcon,{tintColor:'white'}]} />
+          <View style={{
+            height: 28, width: 28, margin: 0, backgroundColor: GRADIENT_START, borderRadius: 20, justifyContent: 'center', alignItems: 'center',
+            position: 'absolute', bottom: 0, right: 0
+          }}>
+            <Text style={{ fontSize: 20, fontWeight: '500', color: 'white' }}>+</Text>
+          </View>
         </TouchableOpacity>
       </View>
-      
-      <TouchableOpacity style={[styles.editProfileBtn, { backgroundColor:handleUpdateProfileBtnDisability()?DISABLE_BTN_COLOR : GRADIENT_START}]} onPress={handleEditProfile} disabled={handleUpdateProfileBtnDisability()}>
-            <Text style={styles.btnText}>Update</Text>
-          </TouchableOpacity>
-      <Loader isVisible={isLoading}/>
+
+      <TouchableOpacity style={[styles.editProfileBtn, { backgroundColor: handleUpdateProfileBtnDisability() ? DISABLE_BTN_COLOR : GRADIENT_START }]} onPress={handleEditProfile} disabled={handleUpdateProfileBtnDisability()}>
+        <Text style={styles.btnText}>Update</Text>
+      </TouchableOpacity>
+      <Loader isVisible={isLoading} />
     </ScrollView>
   )
 }
