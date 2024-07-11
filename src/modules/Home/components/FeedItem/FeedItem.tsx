@@ -58,7 +58,10 @@ const FeedItem = ({ data,userData, onClickOptions, handleLikePost, handleUnlikeP
               navigation.navigate(OTHER_USER_PROFILE_SCREEN,{userId:data.userId})
             }}>
               {data.userProfilePicture ?
-              <Image source={{uri:data.userProfilePicture}} style={[styles.profileImage, {tintColor:'',resizeMode:'cover'}]} />
+              <Image source={{uri:data.userProfilePicture}} style={[{width:40,
+                height:40,
+                borderRadius:25,
+                marginLeft:10,resizeMode:'cover'}]} />
               : 
               <Image source={post_profile_icon} style={styles.profileImage} />
               }
