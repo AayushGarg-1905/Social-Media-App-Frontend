@@ -19,9 +19,11 @@ const window = Dimensions.get('window')
 type Props = {
   fetchPosts:()=>Promise<PostModel.PostData[] | undefined>;
   scrollEnabled?:boolean
+  triggerRender?:boolean
+  setTriggerRender?:React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Feeds = ({fetchPosts,scrollEnabled}:Props) => {
+const Feeds = ({fetchPosts,scrollEnabled,triggerRender,setTriggerRender}:Props) => {
 
   const isFocused = useIsFocused();
   const authData = useAppSelector((state) => state.auth);
@@ -34,11 +36,11 @@ const Feeds = ({fetchPosts,scrollEnabled}:Props) => {
   const [userData, setUserData] = useState<UserModel.UserData | null>(null);
 
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused || triggerRender) {
       fetchUserData();
       fetchAllPosts();
     }
-  }, [isFocused])
+  }, [isFocused,triggerRender])
 
   // const fetchAllPosts = async () => {
   //   if (authData.data && authData.data.accessToken) {
@@ -55,6 +57,9 @@ const Feeds = ({fetchPosts,scrollEnabled}:Props) => {
     const res = await fetchPosts();
     if(res){
       setFeeds(res);
+      if(setTriggerRender){
+        setTriggerRender(false);
+      }
     }
   }
 

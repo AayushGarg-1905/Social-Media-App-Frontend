@@ -15,7 +15,6 @@ export default class CommentService {
         comment: string
     ) {
         const createCommentUrl = CommentModel.ApiUrls.createComment.replace(':postId', postId);
-        console.log('createCommentUrl ', createCommentUrl);
 
         const config = {
             headers: {
@@ -26,7 +25,6 @@ export default class CommentService {
         const request = {
             text: comment
         }
-        console.log('request of createComment is ', request)
 
         type TRequest = typeof request;
         let res: AxiosResponse<CommentModel.CreateCommentResponse, any> | undefined;
@@ -36,7 +34,6 @@ export default class CommentService {
                 request,
                 config
             );
-            console.log('res of createComment is ', res.data);
         } catch (err) {
             // ErrorHandler(err);
             if (axios.isAxiosError(err)) {
@@ -57,7 +54,6 @@ export default class CommentService {
         postId: string,
     ) {
         const getAllCommentsUrl = CommentModel.ApiUrls.getAllComments.replace(':postId', postId);
-        console.log('getAllCommentsUrl ', getAllCommentsUrl);
 
         const config = {
             headers: {
@@ -71,7 +67,6 @@ export default class CommentService {
                 getAllCommentsUrl,
                 config
             );
-            console.log('res of getAllComments is ', res.data);
         } catch (err) {
             // ErrorHandler(err);
             if (axios.isAxiosError(err)) {
@@ -92,7 +87,6 @@ export default class CommentService {
         commentId:string
       ) {
         const deleteCommentUrl = (CommentModel.ApiUrls.deleteComment).replace(':commentId',commentId);
-        console.log('deleteCommentUrl is ',deleteCommentUrl);
         const config = {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -105,7 +99,6 @@ export default class CommentService {
             deleteCommentUrl,
             config
           );
-          console.log('res of DeletePostResponse is ', res.data);
         } catch (err) {
           // ErrorHandler(err);
           if (axios.isAxiosError(err)) {
@@ -127,7 +120,6 @@ export default class CommentService {
         commentId:string
       ) {
         const editCommentUrl = (CommentModel.ApiUrls.editComment).replace(':commentId',commentId);
-        console.log('editCommentUrl is ',editCommentUrl);
         const config = {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -147,7 +139,6 @@ export default class CommentService {
             request,
             config
           );
-          console.log('res of EditCommentResponse is ', res.data);
         } catch (err) {
           // ErrorHandler(err);
           if (axios.isAxiosError(err)) {

@@ -11,14 +11,14 @@ export const ApiUrls = {
 export interface LoginResponse {
     msg:string,
     data?:{
-        userData:UserModel.UserData
+        userData:AuthData
     }
 }
 
 export interface CheckLoginResponse {
     msg:string,
     data?:{
-        userData:UserModel.UserData
+        userData:AuthData
     }
 }
 
@@ -28,4 +28,10 @@ export interface RegisterResponse{
 
 export interface LogoutResponse{
     msg:string
+}
+
+
+export interface AuthData{
+    accessToken:string;
+    userId:string;
 }

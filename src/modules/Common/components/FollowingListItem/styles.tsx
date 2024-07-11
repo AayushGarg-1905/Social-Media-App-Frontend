@@ -5,12 +5,8 @@ export const styles = StyleSheet.create({
     container: {
         width: '100%',
         alignSelf: 'center',
-        // backgroundColor: '#f2f2f2',
         marginTop: 20,
         borderRadius:10,
-        // paddingBottom:20,
-        // borderWidth:1,
-        // borderColor:'red'
     },
     header: {
         width:'100%',
@@ -38,8 +34,7 @@ export const styles = StyleSheet.create({
         color:'black'
     },
     timestampText:{
-        fontSize:11,
-        color:'black'
+        fontSize:14
     },
     icon:{
         height:24,
@@ -51,7 +46,7 @@ export const styles = StyleSheet.create({
         width:'90%',
         marginTop:10,
         alignSelf:'center',
-        color:'black'
+        // color:'black'
     },
     postImage:{
         width:'100%',

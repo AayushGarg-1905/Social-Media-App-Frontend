@@ -18,7 +18,8 @@ export const styles = StyleSheet.create({
     captionInput:{
         width:'100%',
         height:'100%',
-        textAlignVertical:'top'
+        textAlignVertical:'top',
+        color:'black'
     },
     imagePickerBtn:{
         width:'90%',
@@ -36,7 +37,8 @@ export const styles = StyleSheet.create({
     },
     pickerIconText:{
         marginLeft:15,
-        fontSize:18
+        fontSize:18,
+        color:'grey'
     },
     selectedImageView:{
         width:'90%',

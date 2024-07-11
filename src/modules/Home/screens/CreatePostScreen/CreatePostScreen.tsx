@@ -97,6 +97,7 @@ const CreatePostScreen = () => {
           onChangeText={(text)=>setCaption(text)}
           placeholder='Type caption here...'
           multiline={true}
+          placeholderTextColor='grey'
           style={styles.captionInput} />
       </View>
 

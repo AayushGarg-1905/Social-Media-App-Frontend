@@ -5,7 +5,9 @@ export const ApiUrls = {
     getUser: BASE_URL + '/users/:id',
     followUser: BASE_URL + '/users/follow/:followerId',
     unfollowUser: BASE_URL + '/users/unfollow/:followerId',
-    updateUser: BASE_URL + '/users/update'
+    updateUser: BASE_URL + '/users/update',
+    getFollowingList: BASE_URL + '/users/following/:userId/all',
+    getFollowersList: BASE_URL + '/users/followers/:userId/all'
 }
 
 export interface FollowUserResponse{
@@ -25,6 +27,20 @@ export interface UpdateUserResponse{
     msg:string
 }
 
+export interface GetFollowingListResponse{
+    msg:string;
+    data:{
+        followingData:FollowingData[]
+    }
+}
+
+export interface GetFollowersListResponse{
+    msg:string;
+    data:{
+        followersData:FollowersData[]
+    }
+}
+
 export interface UserData {
     accessToken: string;
     userId:string;
@@ -39,4 +55,16 @@ export interface UserData {
     totalPosts?:number;
     coverPicture:string;
     profilePicture:string;
+}
+
+export interface FollowingData{
+    _id:string,
+    userName:string,
+    profilePicture:string
+}
+
+export interface FollowersData{
+    _id:string,
+    userName:string,
+    profilePicture:string
 }

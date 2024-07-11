@@ -147,6 +147,7 @@ const CommentScreen = ({ route }: CommentProps) => {
                     value={comment}
                     onChangeText={(text) => setComment(text)}
                     placeholder='Type comment here...'
+                    placeholderTextColor='grey'
                     style={styles.commentInput}
                     multiline={true}
                 />

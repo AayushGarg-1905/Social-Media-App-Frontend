@@ -70,15 +70,11 @@ const EditProfileScreen = ({ route }: EditProfileProps) => {
     let coverPicture: string | undefined = undefined;
     try {
       if (profileImageData) {
-        console.log('profileImageData is ', profileImageData);
         profilePicture = await uploadImageToFirebase(profileImageData);
       }
-      console.log('after Profile picture');
       if (coverImageData) {
-        console.log('coverImageData is ', coverImageData);
         coverPicture = await uploadImageToFirebase(coverImageData);
       }
-      console.log('after coverPicture');
     }
     catch (error) {
       Toast.show({

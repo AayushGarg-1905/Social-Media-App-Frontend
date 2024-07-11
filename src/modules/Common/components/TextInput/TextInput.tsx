@@ -36,7 +36,7 @@ const TextInput = ({
           placeholderTextColor={onPrimarySurfaceDimText}
           value={value}
           onChangeText={onChangeText}
-          style={{borderWidth:0.4,borderRadius:10, paddingLeft:10}}
+          style={{borderWidth:0.4,borderRadius:10, paddingLeft:10,color:'black'}}
           {...props}
         />
       </View>
@@ -50,4 +50,5 @@ const TextInput = ({
   )
 }
 
-export default memo(TextInput);
+// export default memo(TextInput);
+export default TextInput

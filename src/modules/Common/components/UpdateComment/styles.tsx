@@ -27,7 +27,8 @@ export const styles = StyleSheet.create({
     commentInput: {
         width: '100%',
         height: '100%',
-        textAlignVertical: 'top'
+        textAlignVertical: 'top',
+        color:'black'
     },
     mainView:{
         width:'90%',

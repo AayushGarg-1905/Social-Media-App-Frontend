@@ -42,7 +42,8 @@ export const styles = StyleSheet.create({
     captionInput: {
         width: '100%',
         height: '100%',
-        textAlignVertical: 'top'
+        textAlignVertical: 'top',
+        color:'black'
     },
     selectedImageView: {
         width: '90%',

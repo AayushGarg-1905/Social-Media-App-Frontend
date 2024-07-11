@@ -17,17 +17,6 @@ const SplashScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const authData = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  // useEffect(() => {
-  //   console.log('authData is ',authData);
-  //   const isLoggedIn = handleCheckLogin();
-  //   const timer = setTimeout(() => {
-  //     navigation.reset({
-  //       index: 0,
-  //       routes: [{ name:  ? HOME_SCREEN : LOGIN_SCREEN }],
-  //     });
-  //   }, 2000);
-  //   return () => clearTimeout(timer);
-  // }, [navigation]);
 
   useEffect(() => {
     const checkLoginAndNavigate = async () => {

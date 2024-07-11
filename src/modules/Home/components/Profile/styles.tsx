@@ -90,5 +90,17 @@ export const styles = StyleSheet.create({
     },
     logoutBtnText:{
         color:'white'
+    },
+    loaderContainer:{
+        marginTop:window.height/3
+    },
+    followUnfollowBtn:{
+        marginLeft:20,
+        height:30,
+        width:80,
+        borderRadius:10,
+        justifyContent:'center',
+        alignItems:'center',
+        borderWidth:1.2
     }
 })

@@ -45,6 +45,7 @@ const UpdatePost = ({ data, visible, onClose, handleEditPost }: Props) => {
                             onChangeText={(text) => setCaption(text)}
                             placeholder='Type caption here...'
                             multiline={true}
+                            placeholderTextColor='grey'
                             style={styles.captionInput} />
                     </View>
                     {imageUrl && <View style={styles.selectedImageView}>

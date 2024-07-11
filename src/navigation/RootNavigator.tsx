@@ -8,7 +8,9 @@ import {
     CREATE_POST_SCREEN,
     COMMENT_SCREEN,
     EDIT_PROFILE_SCREEN,
-    OTHER_USER_PROFILE_SCREEN
+    OTHER_USER_PROFILE_SCREEN,
+    FOLLOWING_SCREEN,
+    FOLLOWERS_SCREEN
 } from "../utils/constants/RouteName";
 import SplashScreen from "../modules/Common/screens/SplashScreen/SplashScreen";
 import RegisterScreen from "../modules/Auth/screens/RegisterScreen/RegisterScreen";
@@ -19,6 +21,8 @@ import CommentScreen from "../modules/Common/screens/CommentScreen/CommentScreen
 import EditProfileScreen from "../modules/Home/screens/EditProfileScreen/EditProfileScreen";
 import { UserModel } from "../internal_exports";
 import OtherUserProfileScreen from "../modules/Common/screens/OtherUserProfileScreen/OtherUserProfileScreen";
+import FollowingScreen from "../modules/Common/screens/FollowingScreen/FollowingScreen";
+import FollowersScreen from "../modules/Common/screens/FollowersScreen/FollowersScreen";
 
 
 export type RootStackParams = {
@@ -35,7 +39,14 @@ export type RootStackParams = {
     },
     OtherUserProfileScreen:{
         userId:string
+    },
+    FollowingScreen:{
+        userId:string
+    },
+    FollowersScreen:{
+        userId:string
     }
+
     
 }
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -85,6 +96,17 @@ const RootNavigator = () => {
                     name={OTHER_USER_PROFILE_SCREEN}
                     component={OtherUserProfileScreen}
                     options={{ headerTitle: 'Profile' }}
+                />
+
+                <RootStack.Screen
+                    name={FOLLOWING_SCREEN}
+                    component={FollowingScreen}
+                    options={{ headerTitle: 'Following List' }}
+                />
+                <RootStack.Screen
+                    name={FOLLOWERS_SCREEN}
+                    component={FollowersScreen}
+                    options={{ headerTitle: 'Followers List' }}
                 />
 
             </RootStack.Navigator>

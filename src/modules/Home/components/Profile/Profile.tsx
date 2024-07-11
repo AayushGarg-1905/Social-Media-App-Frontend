@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { styles } from './styles'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
@@ -8,10 +8,12 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Feeds from '../Feeds/Feeds';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../../../../navigation/RootNavigator';
-import { EDIT_PROFILE_SCREEN, LOGIN_SCREEN } from '../../../../utils/constants/RouteName';
+import { EDIT_PROFILE_SCREEN, FOLLOWERS_SCREEN, FOLLOWING_SCREEN, LOGIN_SCREEN } from '../../../../utils/constants/RouteName';
 import Toast from 'react-native-toast-message';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { setAuthData } from '../../../../redux/AuthSlice';
+import Loader from '../../../Common/components/Loader/Loader';
+import { GRADIENT_START } from '../../../../utils/Colors';
 
 const userService = new UserService.default();
 const postService = new PostService.default();
@@ -28,17 +30,24 @@ const Profile = ({userId}:ProfileProps) => {
 
   const dispatch = useAppDispatch();
   const [userData,setUserData] = useState<UserModel.UserData | null>(null);
-
+  const [loading,setLoading] = useState(false);
+  const [triggerRender,setTriggerRender] = useState(false);
   const isFocused = useIsFocused();
 
   useEffect(()=>{
     if(isFocused){
-      fetchProfileData();
+      fetchProfileData(true);
     }
   },[isFocused])
 
-  const fetchProfileData = async()=>{
+  const fetchProfileData = async(isFirstLoad:boolean)=>{
+    if(isFirstLoad){
+      setLoading(true);
+    }
     const res = await userService.getUserData(authData.data?.accessToken || null, userId || '');
+    if(isFirstLoad){
+      setLoading(false);
+    }
     if(res && res.data){
       setUserData(res.data.data);
     } 
@@ -48,7 +57,7 @@ const Profile = ({userId}:ProfileProps) => {
     if (authData.data && authData.data.accessToken) {
       const res = await postService.getAllUserPosts(authData.data.accessToken,userId);
       if (res && res.data.data) {
-        fetchProfileData();
+        fetchProfileData(false);
         return res.data.data.postsData
       }
     }
@@ -69,6 +78,45 @@ const Profile = ({userId}:ProfileProps) => {
       dispatch(setAuthData(null));
       
     }
+  }
+
+  const isAlreadyFollowing = ()=>{
+    if(!userData){
+      return false;
+    }
+    let isFollowed = false;
+    userData.followers.map((id) => {
+      if (id === authData.data?.userId) {
+        isFollowed = true;
+      }
+    })
+    return isFollowed;
+  }
+
+  const handleFollowUser = async()=>{
+    const res = await userService.followUser(authData.data ? authData.data.accessToken : null, userId);
+    if (res) {
+      setTriggerRender(true);
+      fetchProfileData(false);
+      fetchAllUserPosts()
+    }
+  }
+
+  const handleUnfollowUser = async()=>{
+    const res = await userService.unfollowUser(authData.data ? authData.data.accessToken : null, userId);
+    if (res) {
+      setTriggerRender(true);
+      fetchProfileData(false);
+      fetchAllUserPosts()
+    }
+  }
+
+  if(loading){
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size='large'/>
+      </View>
+    )
   }
 
   return (
@@ -96,7 +144,24 @@ const Profile = ({userId}:ProfileProps) => {
         
       </View>
       
-      <Text style={styles.userName}>{userData?.userName || ''}</Text>
+      <View style={{flexDirection:'row', alignItems:'center'}}>
+        <Text style={styles.userName}>{userData?.userName || ''}</Text>
+        {authData.data && authData.data.userId !== userId ? 
+
+        isAlreadyFollowing() ?
+        <TouchableOpacity style={styles.followUnfollowBtn} onPress={()=>handleUnfollowUser()}>
+          <Text style={{color:'black'}}>{'Unfollow'}</Text>
+        </TouchableOpacity>
+        : 
+
+        <TouchableOpacity style={styles.followUnfollowBtn} onPress={()=>handleFollowUser()}>
+          <Text  style={{color:'black'}}>{'Follow'}</Text>
+        </TouchableOpacity>
+        
+        : 
+        null}
+        
+      </View>
       <View style={styles.contactDetailsContainer}>
         <View style={{flexDirection:'row',alignItems:'center'}}>
           <Image source={mail_icon} style={{height:16,width:16,marginRight:4}}/>
@@ -110,14 +175,23 @@ const Profile = ({userId}:ProfileProps) => {
       </View>
       
       <View style={styles.statsContainer}>
-        <View style={styles.singleStatContainer}>
-          <Text style={styles.statValue}>{userData ? userData.followers.length : 0}</Text>
-          <Text style={styles.statTitle}>Followers</Text>
-        </View>
-        <View style={styles.singleStatContainer}>
-          <Text style={styles.statValue}>{userData ? userData.following.length : 0}</Text>
-          <Text style={styles.statTitle}>Following</Text>
-        </View>
+        <TouchableOpacity onPress={()=>{
+          navigation.navigate(FOLLOWERS_SCREEN,{userId:userId});
+        }}>
+          <View style={styles.singleStatContainer}>
+            <Text style={styles.statValue}>{userData ? userData.followers.length : 0}</Text>
+            <Text style={styles.statTitle}>Followers</Text>
+          </View>
+        </TouchableOpacity>
+        
+        <TouchableOpacity onPress={()=>{
+          navigation.navigate(FOLLOWING_SCREEN,{userId:userId});
+        }}>
+          <View style={styles.singleStatContainer}>
+            <Text style={styles.statValue}>{userData ? userData.following.length : 0}</Text>
+            <Text style={styles.statTitle}>Following</Text>
+          </View>
+        </TouchableOpacity>
         <View style={styles.singleStatContainer}> 
           <Text style={styles.statValue}>{userData?.totalPosts || 0}</Text>
           <Text style={styles.statTitle}>Posts</Text>
@@ -130,7 +204,8 @@ const Profile = ({userId}:ProfileProps) => {
     </TouchableOpacity>
       : 
       null}
-      <Feeds fetchPosts={fetchAllUserPosts} scrollEnabled={false}/>
+      <Feeds fetchPosts={fetchAllUserPosts} scrollEnabled={false} triggerRender={triggerRender} setTriggerRender={setTriggerRender}/>
+      {/* <Loader isVisible={loading}/> */}
     </ScrollView>
   )
 }

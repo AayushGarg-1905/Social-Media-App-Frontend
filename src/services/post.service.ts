@@ -18,14 +18,12 @@ export default class PostService {
         Authorization: `Bearer ${accessToken}`,
       },
     };
-    console.log('accessToken in service is ', accessToken);
     let res: AxiosResponse<PostModel.GetAllPostsResponse, any> | undefined;
     try {
       res = await this.apiClient.get<PostModel.GetAllPostsResponse>(
         getAllPostsUrl,
         config
       );
-      console.log('res of getAllPosts is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
@@ -65,7 +63,6 @@ export default class PostService {
         request,
         config
       );
-      console.log('res of createPost is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
@@ -86,7 +83,6 @@ export default class PostService {
     postId:string
   ) {
     const deletePostUrl = (PostModel.ApiUrls.deletePost).replace(':postId',postId);
-    console.log('deletePostUrl is ',deletePostUrl);
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -100,7 +96,6 @@ export default class PostService {
         deletePostUrl,
         config
       );
-      console.log('res of DeletePostResponse is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
@@ -122,7 +117,6 @@ export default class PostService {
     caption:string
   ) {
     const editPostUrl = (PostModel.ApiUrls.editPost).replace(':postId',postId);
-    console.log('deletePostUrl is ',editPostUrl);
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -132,8 +126,6 @@ export default class PostService {
     const request = {
       caption
     }
-
-    console.log('editPost request is ',request)
     type TRequest = typeof request;
     
     let res: AxiosResponse<PostModel.EditPostResponse, any> | undefined;
@@ -143,7 +135,6 @@ export default class PostService {
         request,
         config
       );
-      console.log('res of UpdatePostResponse is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
@@ -164,7 +155,6 @@ export default class PostService {
     postId:string,
   ) {
     const likePostUrl = (PostModel.ApiUrls.likePost).replace(':postId',postId);
-    console.log('likePostUrl is ',likePostUrl);
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -182,7 +172,6 @@ export default class PostService {
         request,
         config
       );
-      console.log('res of LikePostResponse is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
@@ -203,7 +192,6 @@ export default class PostService {
     postId:string,
   ) {
     const unlikePostUrl = (PostModel.ApiUrls.unlikePost).replace(':postId',postId);
-    console.log('unlikePostUrl is ',unlikePostUrl);
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -221,7 +209,6 @@ export default class PostService {
         request,
         config
       );
-      console.log('res of UnlikePostResponse is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if (axios.isAxiosError(err)) {
@@ -247,7 +234,6 @@ export default class PostService {
         Authorization: `Bearer ${accessToken}`,
       },
     };
-    console.log('accessToken in service is ', accessToken);
     let res: AxiosResponse<PostModel.GetAllUserPostsResponse, any> | undefined;
     try {
       res = await this.apiClient.get<PostModel.GetAllUserPostsResponse>(

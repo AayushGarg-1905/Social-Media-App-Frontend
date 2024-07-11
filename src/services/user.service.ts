@@ -13,8 +13,6 @@ export default class UserService {
         userId:string
     ){
         const getUserUrl = UserModel.ApiUrls.getUser.replace(':id', userId);
-        console.log('getUserUrl ', getUserUrl);
-
         const config = {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -27,7 +25,6 @@ export default class UserService {
                 getUserUrl,
                 config
             );
-            console.log('res of GetUserResponse is ', res.data);
         } catch (err) {
             // ErrorHandler(err);
             if (axios.isAxiosError(err)) {
@@ -48,7 +45,7 @@ export default class UserService {
         followerId: string
     ) {
         const followUserUrl = UserModel.ApiUrls.followUser.replace(':followerId',followerId);
-        console.log('followUserUrl is ',followUserUrl);
+
         const config = {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -63,7 +60,6 @@ export default class UserService {
                 request,
                 config
             );
-            console.log('res of followUserResponse is ', res.data);
         } catch (err) {
             // ErrorHandler(err);
             if (axios.isAxiosError(err)) {
@@ -84,7 +80,6 @@ export default class UserService {
         followerId: string
     ) {
         const unfollowUserUrl = UserModel.ApiUrls.unfollowUser.replace(':followerId',followerId);
-        console.log('unfollowUserUrl is ',unfollowUserUrl);
         const config = {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -99,7 +94,6 @@ export default class UserService {
                 request,
                 config
             );
-            console.log('res of UnfollowUserResponse is ', res.data);
         } catch (err) {
             // ErrorHandler(err);
             if (axios.isAxiosError(err)) {
@@ -124,7 +118,6 @@ export default class UserService {
         coverPicture?:string
     ) {
         const updateUserUrl = UserModel.ApiUrls.updateUser;
-        console.log('updateUserUrl is ',updateUserUrl);
         const config = {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -146,7 +139,71 @@ export default class UserService {
                 request,
                 config
             );
-            console.log('res of UpdateUserResponse is ', res.data);
+        } catch (err) {
+            // ErrorHandler(err);
+            if (axios.isAxiosError(err)) {
+                if (err.response) {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error occured',
+                        text2: err.response.data.msg
+                    })
+                }
+            }
+        }
+        return res;
+    }
+
+    public async getFollowingList(
+        accessToken:string | null,
+        userId:string
+    ){
+        const getFollowingListUrl = UserModel.ApiUrls.getFollowingList.replace(':userId', userId);
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        };
+
+        let res: AxiosResponse<UserModel.GetFollowingListResponse, any> | undefined;
+        try {
+            res = await this.apiClient.get<UserModel.GetFollowingListResponse>(
+                getFollowingListUrl,
+                config
+            );
+        } catch (err) {
+            // ErrorHandler(err);
+            if (axios.isAxiosError(err)) {
+                if (err.response) {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error occured',
+                        text2: err.response.data.msg
+                    })
+                }
+            }
+        }
+        return res;
+    }
+
+    public async getFollowersData(
+        accessToken:string | null,
+        userId:string
+    ){
+        const getFollowersListUrl = UserModel.ApiUrls.getFollowersList.replace(':userId', userId);
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        };
+
+        let res: AxiosResponse<UserModel.GetFollowersListResponse, any> | undefined;
+        try {
+            res = await this.apiClient.get<UserModel.GetFollowersListResponse>(
+                getFollowersListUrl,
+                config
+            );
         } catch (err) {
             // ErrorHandler(err);
             if (axios.isAxiosError(err)) {

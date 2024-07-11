@@ -38,8 +38,7 @@ export const styles = StyleSheet.create({
         color:'black'
     },
     timestampText:{
-        fontSize:11,
-        color:'black'
+        fontSize:14
     },
     icon:{
         height:24,
@@ -51,7 +50,7 @@ export const styles = StyleSheet.create({
         width:'90%',
         marginTop:10,
         alignSelf:'center',
-        color:'black'
+        // color:'black'
     },
     postImage:{
         width:'100%',

@@ -26,13 +26,11 @@ export default class AuthService {
     };
     type TRequest = typeof request;
     let res: AxiosResponse<AuthModel.RegisterResponse, any> | undefined;
-    console.log('register request is ', request)
     try {
       res = await this.apiClient.post<TRequest, AuthModel.RegisterResponse>(
         registerUrl,
         request,
       );
-      console.log('res of register is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if(axios.isAxiosError(err)){
@@ -64,7 +62,6 @@ export default class AuthService {
         loginUrl,
         request,
       );
-      console.log('res of login is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if(axios.isAxiosError(err)){
@@ -97,7 +94,6 @@ export default class AuthService {
         checkLoginUrl,
         config,
       );
-      console.log('res of checkLogin is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if(axios.isAxiosError(err)){
@@ -132,7 +128,6 @@ export default class AuthService {
         request,
         config
       );
-      console.log('res of logout is ', res.data);
     } catch (err) {
       // ErrorHandler(err);
       if(axios.isAxiosError(err)){

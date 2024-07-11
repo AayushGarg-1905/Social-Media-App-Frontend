@@ -21,7 +21,7 @@ const UpdateComment = ({data, visible, handleEditComment,onClose}:Props) => {
     },[visible])
 
     const handleUpdateCommentBtnDisability = ()=>{
-        if(data && data.text === comment){
+        if((data && data.text === comment) || (comment.length==0)){
             return true;
         }
         return false;
@@ -37,6 +37,7 @@ const UpdateComment = ({data, visible, handleEditComment,onClose}:Props) => {
                             value={comment}
                             onChangeText={(text) => {setComment(text) }}
                             placeholder='Type comment here...'
+                            placeholderTextColor='grey'
                             multiline={true}
                             style={styles.commentInput} />
                     </View>

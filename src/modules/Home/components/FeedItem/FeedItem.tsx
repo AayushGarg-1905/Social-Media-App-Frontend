@@ -22,8 +22,7 @@ type Props = {
 }
 
 const FeedItem = ({ data,userData, onClickOptions, handleLikePost, handleUnlikePost, handleFollowUser, handleUnfollowUser }: Props) => {
-  
-  
+
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const authData = useAppSelector((state) => state.auth);
 

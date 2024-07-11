@@ -32,14 +32,16 @@ export const styles = StyleSheet.create({
         color:'black'
     },
     timestampText:{
-        fontSize:14
+        fontSize:11,
+        color:'black'
     },
     commentText:{
         fontSize:16,
         fontWeight:'400',
         width:'90%',
         alignSelf:'center',
-        marginTop:10
+        marginTop:10,
+        color:'black'
     },
     icon:{
         height:20,

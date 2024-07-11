@@ -1,4 +1,4 @@
-import { Button, Image, Pressable, Text, View } from 'react-native'
+import { Button, Image, Pressable, ScrollView, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { styles } from './styles'
 import { logo_icon } from '../../../../utils/images/GeneralImages'
@@ -31,7 +31,6 @@ const LoginScreen = () => {
 
 
   const handleLogin = async()=>{
-    console.log('login clicked')
     setIsLoading(true);
     const res = await authService.login(email.value, md5(password.value));
     if(res && res.status === 200 && res.data.data){
@@ -56,7 +55,7 @@ const LoginScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Image source={logo_icon} style={styles.logo}/>
       <Text style={[styles.welcomeText,{marginTop:-20}]}>Welcome To</Text>
       <Text style={[styles.welcomeText, styles.appName]}>Instagram</Text>
@@ -102,7 +101,7 @@ const LoginScreen = () => {
         Create New Account? <Text style={styles.signUpLink}>Sign Up</Text>
       </Text>
       <Loader isVisible={isLoading}/>
-    </View>
+    </ScrollView>
   )
 }
 

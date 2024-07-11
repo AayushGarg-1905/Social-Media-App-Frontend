@@ -21,7 +21,8 @@ export const styles = StyleSheet.create({
         height:'100%',
         width:'78%',
         marginRight:3,
-        textAlignVertical:'top'
+        textAlignVertical:'top',
+        color:'black'
     },
     postCommentBtn:{
         height:'70%',
